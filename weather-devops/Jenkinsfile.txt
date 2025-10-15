@@ -1,0 +1,38 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Checkout') {
+            steps {
+                git 'https://github.com/<your-username>/weather-devops.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t weather-app .'
+            }
+        }
+
+        stage('Run Container') {
+            steps {
+                sh 'docker run -d -p 5000:5000 --name weather-app weather-app'
+                sh 'sleep 5' // Wait for app to start
+            }
+        }
+
+        stage('Run Selenium Test') {
+            steps {
+                sh 'pip install selenium'
+                sh 'python tests/test_weather_ui.py'
+            }
+        }
+
+        stage('Clean Up') {
+            steps {
+                sh 'docker stop weather-app || true'
+                sh 'docker rm weather-app || true'
+            }
+        }
+    }
+}
