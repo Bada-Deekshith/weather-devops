@@ -3,7 +3,7 @@ import requests
 
 app = Flask(__name__)
 
-API_KEY = "your_openweather_api_key_here"
+API_KEY = "1a502a9821ea7a25f5e99abd0eb4949f"
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -22,3 +22,4 @@ def home():
                 "wind": data["wind"]["speed"]
             }
     return render_template("index.html", weather=weather_data)
+
